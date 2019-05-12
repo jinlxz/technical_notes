@@ -1,6 +1,6 @@
 # javascript tutorial
 ## 1. understanding prototype chain.
-Everything is object in javascript, including type object and instance object, type object defines a type, which can be instantiated and create new instance object of that type, instance object is create from the corresponding type object.
+Everything is object in javascript, including type object and instance object, type object defines a type, which can be instantiated and create new instance object of that type, instance object is created from the corresponding type object.
 
 ### 1.1 Inheritance hierarchy of type object.
 The root of all type object is the object **Object.prototype**, all type object originate from it, also it is true for instance object.
