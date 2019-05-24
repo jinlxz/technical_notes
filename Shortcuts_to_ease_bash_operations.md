@@ -12,7 +12,7 @@ Shortcuts to ease operations in bash shell.
 - `Ctrl+XX` toggle between the start of line and current cursor position
 - `Alt+F` move cursor forword one word
 - `Alt+B` move cursor back one word
-- `Ctrl+D` delete current word.
+- `Ctrl+D` delete current character.
 - `Ctrl+R` search the first history command matched with a given word, press it again, it will search the next matched command in history.
 - `Ctrl+G` exit command search mode without running a command.
 
