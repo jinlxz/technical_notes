@@ -24,4 +24,4 @@ As Ogg pages have a maximum size of about 64 kBytes, Ogg divides each packet int
 
 The encoding is optimized for speed and the expected case of the majority of packets being between 50 and 200 bytes large.  This is a design justification rather than a recommendation.  This encoding both avoids imposing a maximum packet size as well as imposing minimum overhead on small packets. 
 
-![./images/encapsulation.png](images/encapsulation.png)
+![./images/encapsulation.png](images/encapsulation.png =300x)
