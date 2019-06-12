@@ -31,6 +31,7 @@ The encoding is optimized for speed and the expected case of the majority of pac
  Pages are of variable size, usually 4-8 kB, maximum 65307 bytes.  A page header contains all the information needed to demultiplex the logical bitstreams out of the physical bitstream and to perform basic error recovery and landmarks for seeking.
  
  As my understanding one page only contains segments from a single packet, but need to be confirmed. 
+ 
  ![image](./images/page_struct.png)
 
 ```newpage
@@ -59,6 +60,7 @@ Opus can encode frames of 2.5, 5, 10, 20, 40, or 60 ms.  It can also combine mul
 
 Opus is composed of a layer based on Linear Prediction (LP) [LPC] and a layer based on the Modified Discrete Cosine Transform (MDCT) [MDCT].  At any given time, either the LP layer, the MDCT layer, or both, may be active.  It can seamlessly switch between all of its various operating modes, giving it a great deal of flexibility to adapt to varying content and network conditions without renegotiating the current session.  The codec allows input
 and output of various audio bandwidths, defined as follows:
+
 | Abbreviation         | Audio Bandwidth | Sample Rate (Effective) |
 |----------------------|-----------------|-------------------------|
 | NB (narrowband)      |           4 kHz |                   8 kHz |
@@ -135,6 +137,7 @@ TOC byte ==> frame_count_byte(1 byte,required) ==> padding_count_byte(1 or more 
 - frame_length_bytes, indicate the number of bytes of frame in this packet
 
 **The TOC byte is followed by a byte encoding the number of frames in the packet in bits 2 to 7 (marked "M" in Figure 5), with bit 1 indicating whether or not Opus padding is inserted (marked "p" in Figure 5), and bit 0 indicating VBR (marked "v" in Figure 5).**  M MUST NOT be zero, and the audio duration contained within a packet MUST NOT exceed 120 ms [R5]. This limits the maximum frame count for any frame size to 48 (for 2.5 ms frames), with lower limits for longer frame sizes.  Figure 5 illustrates the layout of the frame count byte.
+
 ![image](./images/frame_count_byte.png)
 
 When Opus padding is used, the number of bytes of padding is encoded in the bytes following the frame count byte.  Values from 0...254 indicate that 0...254 bytes of padding are included, in addition to the byte(s) used to indicate the size of the padding.If the value is 255, then the size of the additional padding is 254 bytes, plus the padding value encoded in the next byte.**The additional padding bytes appear at the end of the packet and MUST be set to zero by the encoder to avoid creating a covert channel.** The decoder MUST accept any value for the padding bytes, however.
@@ -142,6 +145,7 @@ When Opus padding is used, the number of bytes of padding is encoded in the byte
 In the CBR case, let R=N-2-P be the number of bytes remaining in the packet after subtracting the (optional) padding.  Then, the compressed length of each frame in bytes is equal to R/M.  The value R MUST be a non-negative integer multiple of M [R6].  The compressed data for all M frames follows, each of size R/M bytes.
 
 In the VBR case, **the (optional) padding length is followed by M-1 frame lengths (indicated by "N1" to "N[M-1]" in Figure 7), each encoded in a one- or two-byte sequence as described above.** The compressed data for all M frames follows, each frame consisting of the indicated number of bytes, with the final frame consuming any remaining bytes before the final padding.
+
 ![image](./images/code3_packet.png)
 # 3. References
 1. [RFC3533: https://tools.ietf.org/html/rfc3533](https://tools.ietf.org/html/rfc3533)
