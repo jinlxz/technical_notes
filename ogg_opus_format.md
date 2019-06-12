@@ -51,3 +51,6 @@ header_size = number_page_segments + 27 [Byte]
 
 The total page size in Bytes is given by:
 page_size = header_size + sum(lacing_values: 1..number_page_segments) [Byte]
+
+## References
+1. [RFC3533: https://tools.ietf.org/html/rfc3533](https://tools.ietf.org/html/rfc3533)
