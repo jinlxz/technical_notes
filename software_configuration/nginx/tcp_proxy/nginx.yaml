@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: nginx-service1
+  name: nginx-service1
+  namespace: cdqa-shared-services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: nginx-service1
+  template:
+    metadata:
+      labels:
+        run: nginx-service1
+    spec:
+      dnsPolicy: ClusterFirst
+      containers:
+      - image: nginx:latest
+        imagePullPolicy: IfNotPresent
+        name: nginx
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        - containerPort: 443
+          name: https
+          protocol: TCP
+        - containerPort: 3306
+          name: mysql
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /etc/nginx
+          name: nginx-config
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: nginx-config
+        name: nginx-config
+      imagePullSecrets:
+      - name: docker-registry-secret        
+      restartPolicy: Always
