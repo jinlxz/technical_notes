@@ -62,3 +62,35 @@ In each of the cases below, word is subject to tilde expansion, parameter expans
 - ${parameter^pattern} ${parameter^^pattern} ${parameter,pattern} ${parameter,,pattern}
 
   **The ^ operator converts lowercase letters matching pattern to uppercase; the , operator converts matching uppercase letters to lowercase. The ^^ and ,, expansions convert each matched character in the expanded value; the ^ and , expansions match and convert only the first character in the expanded value**. If pattern is omitted, it is treated like a ?, which matches every character. If parameter is @ or *, the case modification operation is applied to each positional parameter in turn, and the expansion is the resultant list. If parameter is an array variable subscripted with @ or *, the case modification operation is applied to each member of the array in turn, and the expansion is the resultant list.
+  
+###  Command Substitution
+performs the expansion by executing command and replacing the command substitution with the standard output of the command, with any trailing newlines deleted. Embedded newlines are not deleted, but they may be removed during word splitting.If the substitution appears within double quotes, word splitting and pathname expansion are not performed on the results.
+### Arithmetic Expansion $((expression))
+All tokens in the expression undergo parameter expansion, string expansion, command substitution, and quote removal.
+### Process Substitution
+Process substitution is supported on systems that support named pipes (FIFOs) or the /dev/fd method of naming open files. It takes the form of **<(list) or >(list)**. The process list is run with its input or output connected to a FIFO or some file in /dev/fd. **The name of this file is passed as an argument to the current command as the result of the expansion. If the >(list) form is used, writing to the file will provide input for list. If the <(list) form is used, the file passed as an argument should be read to obtain the output of list.**
+### Word Splitting
+The shell scans the results of parameter expansion, command substitution, and arithmetic expansion that did not occur within double quotes for word splitting.
+
+The shell treats each character of IFS as a delimiter, and splits the results of the other expansions into words on these characters. If IFS is unset, or its value is exactly <space><tab><newline>, the default, **then sequences of <space>, <tab>, and <newline> at the beginning and end of the results of the previous expansions are ignored, and any sequence of IFS characters not at the beginning or end serves to delimit words.Any character in IFS that is not IFS whitespace, along with any adjacent IFS whitespace characters, delimits a field.**
+### Pathname Expansion
+After word splitting, unless the -f option has been set, bash scans each word for the characters ***, ?, and [**. If one of these characters appears, then the word is regarded as a pattern, and replaced with an alphabetically sorted list of file names matching the pattern.
+
+When a pattern is used for pathname expansion, the character ''.'' at the start of a name or immediately following a slash must be matched explicitly, unless the shell option dotglob is set. When matching a pathname, the slash character must always be matched explicitly.
+
+### Redirection
+Before a command is executed, its input and output may be redirected using a special notation interpreted by the shell.Each redirection that may be preceded by a file descriptor number may instead be preceded by a word of the form {varname}. In this case, for each redirection the shell will allocate a file descriptor greater than 10 and assign it to varname.
+
+The word following the redirection operator in the following descriptions, unless otherwise noted, is subjected to brace expansion, tilde expansion, parameter expansion, command substitution, arithmetic expansion, quote removal, pathname expansion, and word splitting.
+### Aliases
+The first word of each simple command, if unquoted, is checked to see if it has an alias. If so, that word is replaced by the text of the alias. The first word of the replacement text is tested for aliases, but a word that is identical to an alias being expanded is not expanded a second time.There is no mechanism for using arguments in the replacement text.
+
+ Aliases are expanded when a command is read, not when it is executed.The commands following the alias definition on that line are not affected by the new alias.Aliases are expanded when a function definition is read, not when the function is executed, because a function definition is itself a compound command. As a consequence, aliases defined in a function are not available until after that function is executed. To be safe, always put alias definitions on a separate line, and do not use alias in compound commands.
+###  Functions
+When a function is executed, the arguments to the function become the positional parameters during its execution. The special parameter # is updated to reflect the change. Special parameter 0 is unchanged.When a function completes, the values of the positional parameters and the special parameter # are restored to the values they had prior to the function's execution.
+
+Variables local to the function may be declared with the local builtin command. Ordinarily, variables and their values are shared between the function and its caller.
+
+Function names and definitions may be listed with the -f option to the declare or typeset builtin commands. The -F option to declare or typeset will list the function names only 
+
+**Functions may be exported so that subshells automatically have them defined with the -f option to the export builtin. A function definition may be deleted using the -f option to the unset builtin.**
