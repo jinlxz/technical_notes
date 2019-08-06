@@ -27,8 +27,9 @@ Each of the metacharacters listed above under DEFINITIONS has special meaning to
   
   When the ‘==’ and ‘!=’ operators are used, the string to the right of the operator is considered a pattern and matched according to the rules described below in Pattern Matching, as if the extglob shell option were enabled. The ‘=’ operator is identical to ‘==’. 
   
-  An additional binary operator, ‘=~’, is available, with the same precedence as ‘==’ and ‘!=’. When it is used, the string to the right of the operator is considered a POSIX extended regular expression and matched accordingly,**The return value is 0 if the substring or full string match the pattern, and 1 otherwise. Any part of the pattern may be quoted to force the quoted portion to be matched as a string. normal quoting characters lose their meanings between brackets. If the pattern is stored in a shell variable, quoting the variable expansion forces the entire pattern to be matched as a string.** Substrings matched by parenthesized subexpressions within the regular expression are saved in the array variable BASH_REMATCH. The element of BASH_REMATCH with index 0 is the portion of the string matching the entire regular expression. The element of BASH_REMATCH with index n is the portion of the string matching the nth parenthesized subexpression. 
+  An additional binary operator, ‘=~’, is available, with the same precedence as ‘==’ and ‘!=’. When it is used, the string to the right of the operator is considered a POSIX extended regular expression and matched accordingly,**The return value is 0 if the substring or full string match the pattern, and 1 otherwise. Any part of the pattern may be quoted to force the quoted portion to be matched as a string. normal quoting characters lose their meanings between brackets (bash respects the literal meaning of these characters, escaping and passing them to regular expression engine automatically, otherwise escaping will not be performed if the string is unquoted.). If the pattern is stored in a shell variable, quoting the variable expansion forces the entire pattern to be matched as a string.** Substrings matched by parenthesized subexpressions within the regular expression are saved in the array variable BASH_REMATCH. The element of BASH_REMATCH with index 0 is the portion of the string matching the entire regular expression. The element of BASH_REMATCH with index n is the portion of the string matching the nth parenthesized subexpression. 
 
+  expressions can be grouped and concatenated with the following operators `(), !, && and ||`
 ## Array
 Bash provides one-dimensional indexed and associative array variables. Any variable may be used as an indexed array.
 Indexed arrays are referenced using integers (including arithmetic expressions) and are zero-based; associative arrays are referenced using arbitrary strings.
@@ -99,23 +100,24 @@ After word splitting, unless the -f option has been set, bash scans each word fo
 
 When a pattern is used for pathname expansion, the character ''.'' at the start of a name or immediately following a slash must be matched explicitly, unless the shell option dotglob is set. When matching a pathname, the slash character must always be matched explicitly.
 
-### Redirection
+## Redirection
 Before a command is executed, its input and output may be redirected using a special notation interpreted by the shell.Each redirection that may be preceded by a file descriptor number may instead be preceded by a word of the form {varname}. In this case, for each redirection the shell will allocate a file descriptor greater than 10 and assign it to varname.
 
 The word following the redirection operator in the following descriptions, unless otherwise noted, is subjected to brace expansion, tilde expansion, parameter expansion, command substitution, arithmetic expansion, quote removal, pathname expansion, and word splitting.
-### Aliases
+## Aliases
 The first word of each simple command, if unquoted, is checked to see if it has an alias. If so, that word is replaced by the text of the alias. The first word of the replacement text is tested for aliases, but a word that is identical to an alias being expanded is not expanded a second time.There is no mechanism for using arguments in the replacement text.
 
  Aliases are expanded when a command is read, not when it is executed.The commands following the alias definition on that line are not affected by the new alias.Aliases are expanded when a function definition is read, not when the function is executed, because a function definition is itself a compound command. As a consequence, aliases defined in a function are not available until after that function is executed. To be safe, always put alias definitions on a separate line, and do not use alias in compound commands.
-###  Functions
+##  Functions
 When a function is executed, the arguments to the function become the positional parameters during its execution. The special parameter # is updated to reflect the change. Special parameter 0 is unchanged.When a function completes, the values of the positional parameters and the special parameter # are restored to the values they had prior to the function's execution.
 
-Variables local to the function may be declared with the local builtin command. Ordinarily, variables and their values are shared between the function and its caller.
+Variables local to the function may be declared with the local builtin command. Ordinarily, variables and their values are shared between the function and its caller.**The value of a variable that a function sees depends on its value within its caller, if any, whether that caller is the "global" scope or another shell function.** This is also the value that a local variable declaration "shadows", and the value that is restored when the function returns.
+For example, if a variable var is declared as local in function func1, and func1 calls another function func2, references to var made from within func2 will resolve to the local variable var from func1, shadowing any global variable named var. 
 
 Function names and definitions may be listed with the -f option to the declare or typeset builtin commands. The -F option to declare or typeset will list the function names only 
 
 **Functions may be exported so that subshells automatically have them defined with the -f option to the export builtin. A function definition may be deleted using the -f option to the unset builtin.**
-### Simple Command Expansion
+## Simple Command Expansion
 shell performs the following expansions, assignments, and redirections, from left to right.**The text after the = in each variable assignment undergoes tilde expansion, parameter expansion, command substitution, arithmetic expansion, and quote removal before being assigned to the variable.**
 
 **Command  substitution,  commands grouped with parentheses, and asynchronous commands are invoked in a subshell environment that is a duplicate of the shell environment,** except that traps caught by the shell are reset to the values that the shell  inherited  from  its  parent  at  invocation. **Builtin  commands  that  are  invoked as part of a pipeline are also executed in a subshell environment.**  Changes made to the subshell environment cannot affect the shell's execution environment.
