@@ -15,5 +15,5 @@ Shortcuts to ease operations in bash shell.
 - `Ctrl+D` delete current character.
 - `Ctrl+R` search the first history command matched with a given word, press it again, it will search the next matched command in history.
 - `Ctrl+G` exit command search mode without running a command.
-
+- `Ctrl+_` undo last editing command
 [References][<https://www.howtogeek.com/howto/ubuntu/keyboard-shortcuts-for-bash-command-shell-for-ubuntu-debian-suse-redhat-linux-etc/>]

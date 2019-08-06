@@ -2,11 +2,32 @@
 ## Quoting
 Quoting is used to remove the special meaning of certain characters or words to the shell. Quoting can be used to disable special treatment for special characters, to prevent reserved words from being recognized as such, and to prevent parameter expansion
 
-Each of the metacharacters listed above under DEFINITIONS has special meaning to the shell and must be quoted if it is to represent itself
-`| & ; ( ) < > space tab`
+Each of the metacharacters listed above under DEFINITIONS has special meaning to the shell and must be quoted if it is to represent itself `| & ; ( ) < > space tab`
 - non-quoted backslash (\) is the escape character. It preserves the literal value of the next character that follows, with the exception of <newline>.
 - Enclosing characters in single quotes preserves the literal value of each character within the quotes
 - Enclosing characters in double quotes preserves the literal value of all characters within the quotes, with the exception of ``$, `, \ `` and, when history expansion is enabled, !. The backslash retains its special meaning only when followed by one of the following characters: ``$, ` , " , \ , or < newline >``.
+## Shell Commands
+### Compound Commands
+#### Conditional Constructs
+- case statement.
+
+  ```shell
+  case word in
+      [ [(] pattern [| pattern]…) command-list ;;]…
+  esac
+  ```
+  **The `word` undergoes tilde expansion, parameter expansion, command substitution, arithmetic expansion, and quote removal before matching is attempted. Each `pattern` undergoes tilde expansion, parameter expansion, command substitution, and arithmetic expansion. pattern is matched with rules as pathname expansion.**
+  
+  There may be an arbitrary number of case clauses, each terminated by a ‘;;’, ‘;&’, or ‘;;&’. The first pattern that matches determines the command-list that is executed. It’s a common idiom to use ‘*’ as the final pattern to define the default case, since that pattern will always match. 
+  
+  If the ‘;;’ operator is used, no subsequent matches are attempted after the first pattern match. Using ‘;&’ in place of ‘;;’ causes execution to continue with the command-list associated with the next clause, if any. Using ‘;;&’ in place of ‘;;’ causes the shell to test the patterns in the next clause, if any, and execute any associated command-list on a successful match, continuing the case statement execution as if the pattern list had not matched.
+- [[]] statement
+
+  **Word splitting and filename expansion are not performed on the words between the [[ and ]]**; tilde expansion, parameter and variable expansion, arithmetic expansion, command substitution, process substitution, and quote removal are performed.
+  
+  When the ‘==’ and ‘!=’ operators are used, the string to the right of the operator is considered a pattern and matched according to the rules described below in Pattern Matching, as if the extglob shell option were enabled. The ‘=’ operator is identical to ‘==’. 
+  
+  An additional binary operator, ‘=~’, is available, with the same precedence as ‘==’ and ‘!=’. When it is used, the string to the right of the operator is considered a POSIX extended regular expression and matched accordingly,**The return value is 0 if the substring or full string match the pattern, and 1 otherwise. Any part of the pattern may be quoted to force the quoted portion to be matched as a string. normal quoting characters lose their meanings between brackets. If the pattern is stored in a shell variable, quoting the variable expansion forces the entire pattern to be matched as a string.** Substrings matched by parenthesized subexpressions within the regular expression are saved in the array variable BASH_REMATCH. The element of BASH_REMATCH with index 0 is the portion of the string matching the entire regular expression. The element of BASH_REMATCH with index n is the portion of the string matching the nth parenthesized subexpression. 
 
 ## Array
 Bash provides one-dimensional indexed and associative array variables. Any variable may be used as an indexed array.
@@ -94,3 +115,9 @@ Variables local to the function may be declared with the local builtin command. 
 Function names and definitions may be listed with the -f option to the declare or typeset builtin commands. The -F option to declare or typeset will list the function names only 
 
 **Functions may be exported so that subshells automatically have them defined with the -f option to the export builtin. A function definition may be deleted using the -f option to the unset builtin.**
+### Simple Command Expansion
+shell performs the following expansions, assignments, and redirections, from left to right.**The text after the = in each variable assignment undergoes tilde expansion, parameter expansion, command substitution, arithmetic expansion, and quote removal before being assigned to the variable.**
+
+**Command  substitution,  commands grouped with parentheses, and asynchronous commands are invoked in a subshell environment that is a duplicate of the shell environment,** except that traps caught by the shell are reset to the values that the shell  inherited  from  its  parent  at  invocation. **Builtin  commands  that  are  invoked as part of a pipeline are also executed in a subshell environment.**  Changes made to the subshell environment cannot affect the shell's execution environment.
+
+The shell provides several ways to manipulate the environment. **Environment a list of name-value pairs, On invocation, the shell scans its own environment and creates a parameter for each name found, automatically marking it for export to child processes. Executed commands inherit the environment. Environment differs from variable assignment, which are not being inherited** The export and declare -x commands allow parameters and functions to be added to and deleted from the environment.
