@@ -12,4 +12,4 @@ These two types of operating mode have the following behaviors:
 
   Bash reads and executes commands from /etc/bash.bashrc and ~/.bashrc, if these files exist. This may be inhibited by using the --norc option. The --rcfile file option will force bash to read and execute commands from file instead of /etc/bash.bashrc and ~/.bashrc.
 
-2. 
+2. test if termux works.
