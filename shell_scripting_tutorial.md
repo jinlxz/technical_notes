@@ -39,3 +39,5 @@ Read file1 and file2, merging records based on a                common key. By d
 awk reads records (lines) one at a time from each file named on the command line (or standard input if none). For each line, it applies the commands as specified          by the program to the line. 
 - you can set a `field separator` to a full ERE, in which case each occurrence of text that matches that ERE acts as a field separator.
 - You can change the output field separator by          setting the OFS variable. You do this on the command line with the -v option, which sets awk’s variables
+## Chapter 4. Text Processing Tools
+### sort utility
