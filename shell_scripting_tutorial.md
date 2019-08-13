@@ -38,6 +38,18 @@ Read file1 and file2, merging records based on a                common key. By d
 ### Rearranging Fields with awk
 awk reads records (lines) one at a time from each file named on the command line (or standard input if none). For each line, it applies the commands as specified          by the program to the line. 
 - you can set a `field separator` to a full ERE, in which case each occurrence of text that matches that ERE acts as a field separator.
-- You can change the output field separator by          setting the OFS variable. You do this on the command line with the -v option, which sets awk’s variables
+- You can change the output field separator by setting the OFS variable. You do this on the command line with the -v option, which sets awk’s variables
 ## Chapter 4. Text Processing Tools
 ### sort utility
+Sort input lines into an order determined by the key field and datatype options, and the locale.
+#### sorting by fields
+With the -t option, the specified character delimits fields, and whitespace is significant. Thus, a        three-character record consisting of space-X-space has one field without -t, but three with -t' '
+
+The -k option is followed by a field number, or number pair, optionally separated by whitespace after -k. Each number may be suffixed by a dotted character position, and/or some modifier letters which are used to define specific sorting behavior and whose value are same as the corresponding options passed on command line.
+
+If only one field number is specified, the sort key begins at the start of that field, and continues to the end of the record(not the end of the field).If a comma-separated pair of field numbers is given, the sort key starts at the beginning of the first field, and finishes at the end of the second field.
+
+With a dotted character position, comparison begins (first of a number pair) or ends (second of a number pair) at that character position: -k2.4,5.6 compares starting with the fourth character of the second field and ending with the sixth character of the fifth field.
+
+When multiple -k options are given, sorting is by the first key field, and then, when records match in that key, by the second key field, and so on.
+#### sorting text blocks.
