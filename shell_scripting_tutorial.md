@@ -53,3 +53,6 @@ With a dotted character position, comparison begins (first of a number pair) or 
 
 When multiple -k options are given, sorting is by the first key field, and then, when records match in that key, by the second key field, and so on.
 #### sorting text blocks.
+The sorting trick is to use the ability of awk to handle more-general record separators to recognize paragraph breaks, temporarily replace the line breaks inside each address with an otherwise unused character, such as an unprintable control character, and replace the paragraph break with a newline.
+
+in awk Using RS="" is a special case, whereby records are separated by blank lines; i.e., each block or "paragraph" of text forms a separate record.
