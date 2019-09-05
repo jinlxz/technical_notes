@@ -1,7 +1,14 @@
 # javascript tutorial
 ## 1. understanding prototype chain.
 Everything is object in javascript, including type object and instance object, type object defines a type, which can be instantiated and create new instance object of that type, instance object is created from the corresponding type object.
-
+```JavaScript
+function ggg(){
+   this.name='hhh'
+}
+ggg.prototype.xxx=true;
+ggg.prototype.kkk=0;
+```
+**function or class declaration  declares prototype definition of a NEW type object, the above code is equivalent to `ggg.prototype.constructor=ggg`, the Symbol `ggg` only  represents a type object, It is a function or constructor object which is used to construct an instance   object of the declared type, so all type objects are function or constructor.**
 ### 1.1 Inheritance hierarchy of type object.
 The root of all type object is the object **Object.prototype**, all type object originate from it, also it is true for instance object.
 - String object --> function () --> Object.prototype --> null
