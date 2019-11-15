@@ -1,0 +1,1 @@
+./helm install --namespace shared-services --name prometheus -f prometheus_values.yaml stable/prometheus
