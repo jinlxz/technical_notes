@@ -1,0 +1,150 @@
+rbac:
+  create: true
+podSecurityPolicy:
+  enabled: false
+initChownData:
+  enabled: false
+imagePullSecrets:
+alertmanager:
+  enabled: false
+configmapReload:
+  name: configmap-reload
+  image:
+    repository: jimmidyson/configmap-reload
+    tag: v0.2.2
+    pullPolicy: IfNotPresent
+  extraArgs: {}
+  extraVolumeDirs: []
+  extraConfigmapMounts: []
+  resources: {}
+kubeStateMetrics:
+  enabled: false
+  name: kube-state-metrics
+  image:
+    repository: quay.io/coreos/kube-state-metrics
+    tag: v1.6.0
+    pullPolicy: IfNotPresent
+  priorityClassName: ""
+  args: {}
+  tolerations: []
+  nodeSelector: {}
+  podAnnotations: {}
+  podSecurityPolicy:
+    annotations: {}
+  pod:
+    labels: {}
+  replicaCount: 1
+  resources: {}
+  securityContext:
+    runAsUser: 65534
+    runAsNonRoot: true
+  service:
+    annotations:
+      prometheus.io/scrape: "true"
+    labels: {}
+    clusterIP: None
+    externalIPs: []
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    servicePort: 80
+    type: ClusterIP
+nodeExporter:
+  enabled: false
+server:
+  enabled: true
+  name: server
+  sidecarContainers:
+  image:
+    repository: prom/prometheus
+    tag: v2.13.1
+    pullPolicy: IfNotPresent
+  priorityClassName: ""
+  prefixURL: ""
+  baseURL: ""
+  env: {}
+  enableAdminApi: false
+  skipTSDBLock: false
+  configPath: /etc/config/prometheus.yml
+  global:
+    scrape_interval: 1m
+    scrape_timeout: 10s
+    evaluation_interval: 1m
+  extraArgs:
+    storage.local.target-heap-size: 10GiB
+  extraInitContainers: []
+  extraVolumeMounts: []
+  extraVolumes: []
+  extraHostPathMounts: []
+  extraConfigmapMounts: []
+  extraSecretMounts: []
+  configMapOverrideName: ""
+  ingress:
+    enabled: false
+    annotations: {}
+    extraLabels: {}
+    hosts: []
+    tls: []
+  tolerations: []
+  nodeSelector: {}
+  affinity: {}
+  persistentVolume:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    annotations: {}
+    existingClaim: ""
+    mountPath: /data
+    size: 60Gi
+    subPath: ""
+  emptyDir:
+    sizeLimit: ""
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityPolicy:
+    annotations: {}
+  replicaCount: 1
+  statefulSet:
+    enabled: false
+    annotations: {}
+    labels: {}
+    podManagementPolicy: OrderedReady
+    headless:
+      annotations: {}
+      labels: {}
+      servicePort: 80
+  readinessProbeInitialDelay: 30
+  readinessProbeTimeout: 30
+  livenessProbeInitialDelay: 30
+  livenessProbeTimeout: 30
+  resources:
+    limits:
+      cpu: 2
+      memory: 16384Mi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+  securityContext:
+    runAsUser: 65534
+    runAsNonRoot: true
+    runAsGroup: 65534
+    fsGroup: 65534
+  service:
+    annotations: {}
+    labels: {}
+    clusterIP: ""
+    externalIPs: []
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    servicePort: 80
+    type: NodePort
+  terminationGracePeriodSeconds: 300
+  retention: "3d"
+pushgateway:
+  enabled: false
+serverFiles:
+  prometheus.yml:
+    scrape_configs:
+      - job_name: prometheus
+        static_configs:
+          - targets:
+            - localhost:9090
