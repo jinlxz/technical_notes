@@ -1,0 +1,1 @@
+kubectl run kn-generic-17 -n cdqa-shared-services --generator=run-pod/v1 --overrides='{ "apiVersion": "v1", "spec": { "nodeName": "kn-generic-17" } }' --attach=false --image=busybox -i --command --limits='cpu=100m,memory=256Mi' --requests='cpu=100m,memory=256Mi' -- sh -c 'cat'
