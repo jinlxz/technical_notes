@@ -5,5 +5,6 @@ kubectl run kn-generic-17 --context $context -n cdqa-shared-services --generator
 kubectl --context $context -n cdqa-shared-services get pod | grep kn-generic | awk '{print $1}' > pods.txt
 
 while read pod; do
-        kubectl --context $context -n cdqa-shared-services exec "$pod" date &
+   cmd='t=$(date);echo "$t ==> $(hostname) " '
+   cat <(kubectl --context ci2t -n cdqa-shared-services exec "$pod" -- bash -c "$cmd") &
 done < pods.txt
