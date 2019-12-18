@@ -1,0 +1,10 @@
+host gitlab-*.net
+ HostName gitlab-*.net
+ IdentityFile ~/.ssh/id_rsa_gitlab
+ User git
+host git.labs.net
+  ProxyCommand connect -S 127.0.0.1:9010 %h %p
+  ServerAliveInterval 30
+host
+  ProxyCommand connect -S 127.0.0.1:9010 %h %p
+  ServerAliveInterval 30
