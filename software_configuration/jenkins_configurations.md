@@ -111,3 +111,38 @@ def parseTextToMap(String text,Map map,String defaultValue){
     return map
 }
 ```
+8. pipeline for executing multiple jobs programmatically in parallel.
+```java
+properties([
+    parameters([string(name: 'AGENT_NUM', defaultValue: '2', description: 'the tag of environment configuration to build.'),
+    ])
+]);
+def AGENT_LABEL="jmeter-slave-azure-i2t";
+def AGENT_NUM=env.AGENT_NUM;
+echo "AGENT_NUM ==> ${env.AGENT_NUM}"
+def agentList=[:];
+def agentIpList=[];
+for(int i=0;i<Integer.valueOf(AGENT_NUM);i++){
+    agentList[i]={
+        node(AGENT_LABEL){
+            checkout([$class: 'GitSCM', branches: [[name: 'uidwl']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'git_lab', url: 'git@github.com:test.git']]])
+            def rc=sh label: '', returnStatus: true, script: '''
+                chmod +x ./mvnw
+                ./mvnw clean package -DskipTests > /dev/null 2>&1
+            '''
+            /*
+            if(rc==0)
+                echo "set up agent ${env.HOST_NAME} successfully"
+            else
+                error "Failed to set up agent."
+            */
+            //def ip=println InetAddress.localHost.canonicalHostName;
+            agentIpList.add(InetAddress.localHost.hostAddress);
+        }
+    }
+}
+stage("set up agent"){
+    parallel agentList
+    println agentIpList;
+}
+```
