@@ -146,3 +146,9 @@ stage("set up agent"){
     println agentIpList;
 }
 ```
+9. use separate git key in jenkins
+```shell
+echo "ssh -i ${GIT_KEY}"' $1 $2' > git_ssh.sh 
+chmod +x git_ssh.sh
+GIT_SSH="${WORKSPACE}/git_ssh.sh" git lfs pull origin ${BRANCH_NAME}
+```
