@@ -20,9 +20,10 @@
 - MediaMonkey
 
 #### Android network traffic monitor
-network speed
-netspeed Indicator.
-glasswire data usage monitor
-
+- network speed
+- netspeed Indicator.
+- glasswire data usage monitor
+- more
+- 
 
 
