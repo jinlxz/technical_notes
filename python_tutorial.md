@@ -31,7 +31,8 @@ All `def` definitions in class are normal instances of the type `function`, `Foo
 method is a wrapper object of the `function definition` with `instance object` and `class object`, it will insert the `instance object` into the argument list of the function when method is called by `__call__`
 - the returned method will be called.
 
+END
 
-[reference 1](https://wiki.python.org/moin/FromFunctionToMethod)
-[implemnt descriptor](https://docs.python.org/3/reference/datamodel.html#descriptors)
-[descriptor](https://docs.python.org/3/glossary.html#term-descriptor)
+- [reference 1](https://wiki.python.org/moin/FromFunctionToMethod)
+- [implemnt descriptor](https://docs.python.org/3/reference/datamodel.html#descriptors)
+- [descriptor](https://docs.python.org/3/glossary.html#term-descriptor)
